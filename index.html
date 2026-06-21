@@ -125,7 +125,7 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     <div id="bk-list"></div>
   </div>
 </div>
-<footer>I dati restano sul tuo telefono. Funziona anche offline.</footer>
+<footer id="footer">I dati restano sul tuo telefono. Funziona anche offline.</footer>
 
 <script>
 (function(){
@@ -168,7 +168,10 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     {r:"Vita vera",t:"Cosa fai per staccare la testa nel weekend? Falla vedere, senza filtri."},
     {r:"Vita vera",t:"Il pranzo della domenica in famiglia: il cibo conviviale, quello vero. Niente bilancia."},
     {r:"Vita vera",t:"La tua passione oltre la nutrizione: raccontala con leggerezza, in un take."},
-    {r:"Vita vera",t:"Una cosa normale della tua giornata che ti fa stare bene. Mostrala e basta."}
+    {r:"Vita vera",t:"Una cosa normale della tua giornata che ti fa stare bene. Mostrala e basta."},
+    {r:"Vero o falso?",t:"Sondaggio: gli oli di semi fanno male? Vero o falso, poi spiega con calma (è il dibattito del momento)."},
+    {r:"Vero o falso?",t:"Quiz: più fibra è sempre meglio? Fai votare, poi spiega dosi e quando esagerare non conviene."},
+    {r:"Pensiero del giorno",t:"Tutti a caccia di fibra (il trend 'fibermaxxing'): il tuo pensiero onesto in 30 secondi."}
   ];
   var IDEAS_YT=[
     {r:"Sondaggio",t:"Sondaggio: quando mangi intorno all'allenamento? Prima, dopo, sia prima che dopo. Poi commenti."},
@@ -189,7 +192,10 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     {r:"Tip lampo",t:"Tip in 2 righe: come rendere davvero proteica la colazione (greco + albumi o avena)."},
     {r:"Tip lampo",t:"Tip zero sbatti: un pasto pratico in 5 minuti per chi non ha tempo."},
     {r:"Opinione vera",t:"Opinione scomoda sul marketing degli integratori. Invita a commentare se sono d'accordo."},
-    {r:"Dietro le quinte",t:"Racconta a cosa stai lavorando (il video sulla menopausa?). Mostra la persona dietro il canale."}
+    {r:"Dietro le quinte",t:"Racconta a cosa stai lavorando (il video sulla menopausa?). Mostra la persona dietro il canale."},
+    {r:"Sondaggio",t:"Sondaggio: oli di semi ancora in cucina, o sei passato a burro/EVO? Poi spieghi senza demonizzare."},
+    {r:"Mito in 3 righe",t:"Mito in 3 righe: 'gli oli di semi sono veleno'. Cosa dice davvero la scienza, con calma."},
+    {r:"Domanda al pubblico",t:"Chiedi: quanta fibra mangiate al giorno? Presenta il trend 'fibermaxxing' e i suoi limiti."}
   ];
   var IDEAS_SHORT=[
     {r:"Mito da smontare",t:"Proteine in polvere e metalli pesanti: cosa c'è di vero, in 60 secondi."},
@@ -206,7 +212,12 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     {r:"Ricetta veloce",t:"Yogurt greco proteico con cacao amaro e frutta: la base perfetta, in 1 minuto."},
     {r:"Numeri e quantità",t:"Il cucchiaio di olio EVO: a cosa servono quei 100 kcal e se puoi toglierlo."},
     {r:"Numeri e quantità",t:"Quanti grammi di pasta a pasto se non fai sport: come regolarti davvero."},
-    {r:"Confronto",t:"Depuratore costoso o caraffa filtrante? Cosa serve davvero, in 60 secondi."}
+    {r:"Confronto",t:"Depuratore costoso o caraffa filtrante? Cosa serve davvero, in 60 secondi."},
+    {r:"Mito da smontare",t:"Gli oli di semi fanno davvero male? 60 secondi di chiarezza, senza isterie."},
+    {r:"Mito da smontare",t:"Fibermaxxing: più fibra è sempre meglio? Spoiler in 60 secondi."},
+    {r:"Risposta lampo",t:"Il calore rovina le proteine in polvere? Cosa succede davvero quando le scaldi."},
+    {r:"Risposta lampo",t:"Congelare i pasti distrugge i nutrienti? La verità in 60 secondi."},
+    {r:"Risposta lampo",t:"Creatina anche se non vai in palestra: ha senso? Cosa dice la nuova ricerca."}
   ];
   var IDEAS_LONG=[
     {r:"Richiesto dal pubblico",t:"MENOPAUSA: come cambiano alimentazione e allenamento. Te lo chiedono in tantissime."},
@@ -220,7 +231,12 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     {r:"Approfondimento",t:"Sonno e composizione corporea: come il riposo cambia il peso."},
     {r:"Approfondimento",t:"Acqua, plastica e microplastiche: cosa sappiamo davvero (e serve il depuratore?)."},
     {r:"Approfondimento",t:"Bere ai pasti, digestione e falsi miti: la guida definitiva."},
-    {r:"Donne 40+",t:"Dimagrire dopo i 40-50 anni: cosa cambia e come adattarsi."}
+    {r:"Donne 40+",t:"Dimagrire dopo i 40-50 anni: cosa cambia e come adattarsi."},
+    {r:"Approfondimento",t:"Oli di semi vs burro e strutto: il dibattito del momento, spiegato con la testa (forbice larga)."},
+    {r:"Guida completa",t:"Fibra: quanta ne serve davvero, dove trovarla e il trend 'fibermaxxing' (con i suoi limiti)."},
+    {r:"Approfondimento",t:"Creatina non solo per la palestra: cosa dice la nuova ricerca su energia e quotidianità."},
+    {r:"Approfondimento",t:"Farmaci per dimagrire (tipo Ozempic): cosa cambia davvero a tavola. Senza promesse né giudizi."},
+    {r:"Guida completa",t:"Vitamina D: serve l'integratore? Per chi sì, per chi no, e quando ha senso controllarla."}
   ];
   var PALIN_STORIE=[
     ["Lun","Pensiero del giorno + cosa mangio",["Pensiero del giorno","Cosa mangio davvero"]],
@@ -387,6 +403,10 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
 
   applyMode(get("storie_mode","storie"));
   renderBacklog();
+
+  var META={versione:"v8",aggiornato:"21 giugno 2026",crediti:23438,fonti:"commenti IG+YT, Reddit, Google Trends"};
+  var ft=document.getElementById("footer");
+  if(ft){ft.innerHTML="Versione "+META.versione+" · idee aggiornate il "+META.aggiornato+"<br>"+META.crediti.toLocaleString("it-IT")+" crediti ScrapeCreators rimasti<br>Fonti: "+META.fonti+"<br>I dati restano sul tuo telefono. Funziona anche offline.";}
 
   if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
 })();
