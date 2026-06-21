@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F6E56">
+<title>Storie</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#f6f7f5; --surface:#ffffff; --text:#1b1d1a; --muted:#5f6360; --hint:#8a8f8a;
+  --border:rgba(0,0,0,0.10); --border-strong:rgba(0,0,0,0.20);
+  --accent:#0F6E56; --accent-bg:#E1F5EE; --accent-text:#085041;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14161a; --surface:#1c1f24; --text:#eceeec; --muted:#a8aca8; --hint:#7d827d;
+    --border:rgba(255,255,255,0.12); --border-strong:rgba(255,255,255,0.24);
+    --accent:#1D9E75; --accent-bg:#0f3b30; --accent-text:#9FE1CB;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased; line-height:1.5;
+  padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px);
+}
+.wrap{max-width:560px; margin:0 auto; padding:18px 16px 0}
+header{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px}
+h1{font-size:22px; font-weight:600; margin:0; letter-spacing:-0.01em}
+.date{font-size:13px; color:var(--hint)}
+.seg{display:flex; flex-wrap:wrap; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:4px; gap:4px; margin-bottom:16px}
+.seg-btn{flex:1 1 70px; border:none; background:transparent; color:var(--muted); font-size:14px; font-weight:500; padding:10px 8px; border-radius:9px; cursor:pointer; font-family:inherit; white-space:nowrap}
+.seg-btn.active{background:var(--accent); color:#fff}
+.card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px}
+.badge{display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; padding:5px 12px; border-radius:999px; background:var(--accent-bg); color:var(--accent-text)}
+.label{font-size:12px; color:var(--hint); margin:14px 0 4px; text-transform:uppercase; letter-spacing:0.04em}
+.idea{font-size:20px; line-height:1.45; margin:0 0 16px}
+.btn{appearance:none; -webkit-appearance:none; border:1px solid var(--border-strong); background:var(--surface); color:var(--text);
+  font-size:15px; font-weight:500; padding:12px 14px; border-radius:12px; cursor:pointer; font-family:inherit; min-height:46px; display:inline-flex; align-items:center; justify-content:center; gap:8px}
+.btn:active{transform:scale(0.98)}
+.btn-primary{background:var(--accent); border-color:var(--accent); color:#fff; width:100%; font-size:16px; margin-bottom:10px}
+.btn-primary svg{width:20px; height:20px; flex:none}
+.btn-row{display:flex; gap:8px}
+.btn-row .btn{flex:1}
+.note{font-size:12px; color:var(--hint); margin:12px 0 0; display:flex; align-items:center; gap:6px}
+.note svg{width:15px; height:15px; flex:none}
+.section{margin-top:22px}
+.section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px}
+.section-head .label{margin:0}
+.count b{font-size:18px; font-weight:600; color:var(--text)}
+.count{font-size:13px; color:var(--muted)}
+.pills{display:flex; gap:6px}
+.pill{flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px; padding:11px 0; border-radius:11px;
+  border:1px solid var(--border); background:var(--surface); color:var(--muted); font-size:12px; font-weight:500; cursor:pointer; font-family:inherit}
+.pill.done{background:var(--accent-bg); border-color:var(--accent); color:var(--accent-text)}
+.pill.today{box-shadow:0 0 0 2px var(--accent)}
+.pill svg{width:16px; height:16px}
+.msg{font-size:13px; color:var(--muted); margin:12px 0 0}
+.row{display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--surface); margin-bottom:8px}
+.row .day{font-size:13px; font-weight:600; color:var(--muted); width:34px; flex:none}
+.row .what{font-size:14px}
+.add{display:flex; gap:8px; margin-bottom:8px}
+.add input{flex:1; font-family:inherit; font-size:15px; padding:12px 14px; border-radius:12px; border:1px solid var(--border-strong); background:var(--surface); color:var(--text); min-height:46px}
+.add input:focus{outline:none; border-color:var(--accent)}
+.idea-row{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:var(--surface); margin-bottom:8px}
+.idea-row span{font-size:14px}
+.icon-btn{appearance:none; border:none; background:transparent; color:var(--hint); cursor:pointer; padding:6px; display:inline-flex}
+.icon-btn svg{width:20px; height:20px}
+.empty{font-size:13px; color:var(--hint); margin:6px 0 0}
+footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; color:var(--hint); text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Storie</h1>
+    <span class="date" id="date"></span>
+  </header>
+
+  <div class="seg">
+    <button class="seg-btn active" data-mode="storie">Storie</button>
+    <button class="seg-btn" data-mode="yt">Post YT</button>
+    <button class="seg-btn" data-mode="short">Short</button>
+    <button class="seg-btn" data-mode="long">Long</button>
+  </div>
+
+  <div class="card">
+    <span class="badge"><span id="rubrica"></span></span>
+    <p class="label" id="idea-label">Storia di oggi</p>
+    <p class="idea" id="idea"></p>
+    <button class="btn btn-primary" id="primary"></button>
+    <div class="btn-row">
+      <button class="btn" id="done">Fatto</button>
+      <button class="btn" id="shuffle">Altra idea</button>
+      <button class="btn" id="copy">Copia</button>
+    </div>
+    <p class="note" id="note"></p>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <p class="label">La tua costanza</p>
+      <span class="count"><b id="count">0</b> questa settimana</span>
+    </div>
+    <div class="pills" id="pills"></div>
+    <p class="msg" id="msg"></p>
+  </div>
+
+  <div class="section">
+    <p class="label" id="palin-label">Palinsesto della settimana</p>
+    <div id="palin"></div>
+  </div>
+
+  <div class="section">
+    <p class="label">Idee in cassetto</p>
+    <div class="add">
+      <input id="bk-input" type="text" placeholder="Un'idea che ti viene ora..." />
+      <button class="btn" id="bk-add">Aggiungi</button>
+    </div>
+    <div id="bk-list"></div>
+  </div>
+</div>
+<footer>I dati restano sul tuo telefono. Funziona anche offline.</footer>
+
+<script>
+(function(){
+  var IC={
+    camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>',
+    play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+    mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+    pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L18 10l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>',
+    copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>'
+  };
+  var ICON_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>';
+  var ICON_DOT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/></svg>';
+  var ICON_TRASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/></svg>';
+
+  var IDEAS_STORIE=[
+    {r:"Cosa mangio davvero",t:"Filma la tua colazione: yogurt greco, cacao amaro e frutta. Rispondi a chi ti chiede 'va bene lo stesso?'."},
+    {r:"Cosa mangio davvero",t:"Fai vedere come prepari il pancake di albumi: in tanti te lo chiedono. Mostra le dosi vere."},
+    {r:"Cosa mangio davvero",t:"Mostra il cucchiaio di olio EVO nel piatto e di' in 20 secondi perché quei 100 kcal servono."},
+    {r:"Cosa mangio davvero",t:"Riprendi cosa mangi davvero dopo l'allenamento, senza fronzoli."},
+    {r:"Cosa mangio davvero",t:"Fai vedere il tuo piatto di pasta a pranzo e quanta ne metti davvero."},
+    {r:"Pensiero del giorno",t:"30 secondi sul perché in nutrizione gira tanta fuffa. Voce tua, un take."},
+    {r:"Pensiero del giorno",t:"Perché la bilancia si blocca anche quando stai facendo tutto bene. Spiegalo in faccia."},
+    {r:"Pensiero del giorno",t:"Il fattore che quasi nessuno collega al dimagrimento: il sonno. Raccontalo."},
+    {r:"Pensiero del giorno",t:"La cosa più ridicola che vedi in palestra: lo shaker sbattuto per 10 minuti. Sfogati."},
+    {r:"Chiedimi qualsiasi cosa",t:"Apri il box 'Chiedimi sulle proteine in polvere': è il tema su cui hai più domande."},
+    {r:"Chiedimi qualsiasi cosa",t:"Box domande sulla creatina: dosi, reni, creatinina. Te lo chiedono in tantissimi."},
+    {r:"Chiedimi qualsiasi cosa",t:"Apri il box e rispondi in faccia alle 3 domande più frequenti della settimana."},
+    {r:"Vero o falso?",t:"Sondaggio: bere durante i pasti fa male? Vero o falso, poi spiega."},
+    {r:"Vero o falso?",t:"Quiz: la creatina fa male ai reni? Fai votare, poi sveli la risposta."},
+    {r:"Vero o falso?",t:"Sondaggio: le proteine in polvere sono piene di sostanze tossiche? Poi chiarisci."},
+    {r:"Vero o falso?",t:"Vero o falso: la pasta è un alimento proteico? Poi spiega in 20 secondi."},
+    {r:"Dietro il camice",t:"Ti chiedono spesso 'quante volte ti alleni a settimana?'. Rispondi mostrando la verità."},
+    {r:"Dietro il camice",t:"Racconta cosa ti dà fastidio del marketing nutrizionale: perché smonti la fuffa."},
+    {r:"Dietro il camice",t:"Un errore che facevi anche tu con l'alimentazione. Ammetterlo ti rende umano."},
+    {r:"Backstage allenamento",t:"Filma il tuo allenamento di oggi, anche se eri stanco e svogliato."},
+    {r:"Backstage allenamento",t:"Mostra un esercizio che fai tu e spiega l'errore più comune in 30 secondi."},
+    {r:"Vita vera",t:"Un momento off della giornata: famiglia, caffè o un giro in sim racing con Osvaldo."}
+  ];
+  var IDEAS_YT=[
+    {r:"Sondaggio",t:"Sondaggio: quante volte a settimana ti alleni? (0, 1-2, 3-4, 5+). Poi commenta i risultati."},
+    {r:"Sondaggio",t:"Sondaggio: quale video vuoi per primo? Menopausa, somatotipi, ritenzione idrica, creatina."},
+    {r:"Sondaggio",t:"Sondaggio integratori: cosa usi? Nessuno, proteine, creatina, omega 3."},
+    {r:"Sondaggio",t:"Vero o falso: la creatina fa male ai reni? Fai votare, poi spieghi in un commento."},
+    {r:"Sondaggio",t:"Sondaggio: acqua del rubinetto o in bottiglia? Poi di' la tua su depuratori e caraffe."},
+    {r:"Mito in 3 righe",t:"Smonta in 3 righe: 'le proteine in polvere sono tossiche'. Per chi serve cautela e per chi no."},
+    {r:"Mito in 3 righe",t:"Mito in 3 righe: 'non bere durante i pasti'. Da dove nasce e cosa dice la fisiologia."},
+    {r:"Mito in 3 righe",t:"3 righe: 'i carboidrati la sera fanno ingrassare'. Conta il totale, non l'orario."},
+    {r:"Mito in 3 righe",t:"Mito in 3 righe: tonno tutti i giorni per le proteine? La questione mercurio."},
+    {r:"Domanda al pubblico",t:"Chiedi: qual è l'integratore su cui hai più dubbi? Le risposte diventano un video."},
+    {r:"Domanda al pubblico",t:"Chiedi: qual è il pasto che ti mette più in difficoltà? Raccogli e rispondi."},
+    {r:"Domanda al pubblico",t:"Chiedi: a che ora prendi le proteine? Spoiler per il prossimo post: il timing conta poco."},
+    {r:"Anticipazione video",t:"Anticipa il video sulla MENOPAUSA: frase gancio + data. Te lo chiedono da settimane."},
+    {r:"Anticipazione video",t:"Anticipa il video sui SOMATOTIPI: 'ha senso dividerci in ecto, meso, endo?'. Crea attesa."},
+    {r:"Anticipazione video",t:"Anticipa il video su ritenzione idrica e cellulite: frase forte + quando esce."},
+    {r:"Tip lampo",t:"Tip in 2 righe: come rendere davvero proteica la colazione (greco + albumi o avena)."},
+    {r:"Tip lampo",t:"Tip zero sbatti: un pasto pratico in 5 minuti per chi non ha tempo."},
+    {r:"Opinione vera",t:"Opinione scomoda sul marketing degli integratori. Invita a commentare se sono d'accordo."},
+    {r:"Dietro le quinte",t:"Racconta a cosa stai lavorando (il video sulla menopausa?). Mostra la persona dietro il canale."}
+  ];
+  var IDEAS_SHORT=[
+    {r:"Mito da smontare",t:"Le proteine in polvere sono tossiche? La verità sui metalli pesanti, in 60 secondi."},
+    {r:"Mito da smontare",t:"La creatina fa male ai reni? Smonta la paura più diffusa."},
+    {r:"Mito da smontare",t:"Bere durante i pasti fa male? Cosa dice davvero la fisiologia."},
+    {r:"Mito da smontare",t:"Saltare la colazione fa ingrassare? Spoiler in 60 secondi."},
+    {r:"Mito da smontare",t:"La pasta è un alimento proteico? Chiariscilo una volta per tutte."},
+    {r:"Mito da smontare",t:"Tonno tutti i giorni: quanto mercurio è davvero un problema?"},
+    {r:"Risposta lampo",t:"A che ora prendere le proteine: perché il timing conta meno di quanto credi."},
+    {r:"Risposta lampo",t:"Creatina: 5 g al giorno, anche nei giorni di riposo. Il perché."},
+    {r:"Risposta lampo",t:"Perché la bilancia si blocca anche se stai facendo tutto bene."},
+    {r:"Risposta lampo",t:"Il sonno fa dimagrire? Il legame che quasi nessuno considera."},
+    {r:"Ricetta veloce",t:"Pancake di albumi in 60 secondi: dosi e trucco per la riuscita."},
+    {r:"Ricetta veloce",t:"Yogurt greco proteico: la base perfetta per la colazione, in 1 minuto."},
+    {r:"Numeri e quantità",t:"Il cucchiaio di olio EVO: a cosa servono davvero quei 100 kcal."},
+    {r:"Confronto",t:"Acqua del rubinetto vs in bottiglia: microplastiche e verità in 60 secondi."},
+    {r:"Confronto",t:"Depuratore costoso o caraffa filtrante? Cosa serve davvero."}
+  ];
+  var IDEAS_LONG=[
+    {r:"Richiesto dal pubblico",t:"MENOPAUSA: come cambiano alimentazione e allenamento. Te lo chiedono in tantissime."},
+    {r:"Richiesto dal pubblico",t:"SOMATOTIPI: ecto, meso, endo. Hanno senso? Come mangiare e allenarsi davvero."},
+    {r:"Richiesto dal pubblico",t:"Ritenzione idrica, cellulite e circolazione: cosa funziona e cosa no."},
+    {r:"Guida completa",t:"Creatina dalla A alla Z: dosi, sicurezza, reni, tipi (mono vs alkalina)."},
+    {r:"Guida completa",t:"Proteine: quante, quando, quali fonti, e le proteine in polvere servono?"},
+    {r:"Guida completa",t:"La colazione perfetta: proteica, dolce o salata, con esempi pratici."},
+    {r:"Guida completa",t:"Integratori: quali servono davvero (omega 3, creatina, vitamina D)."},
+    {r:"Approfondimento",t:"Perché la bilancia si blocca: plateau, ritenzione e come sbloccarlo."},
+    {r:"Approfondimento",t:"Sonno e composizione corporea: come il riposo cambia il peso."},
+    {r:"Approfondimento",t:"Acqua, plastica e microplastiche: cosa sappiamo davvero."},
+    {r:"Approfondimento",t:"Bere ai pasti, digestione e falsi miti: la guida definitiva."},
+    {r:"Donne 40+",t:"Dimagrire dopo i 40-50 anni: cosa cambia e come adattarsi."}
+  ];
+  var PALIN_STORIE=[
+    ["Lun","Pensiero del giorno + cosa mangio"],
+    ["Mar","Vero o falso?"],
+    ["Mer","Pensiero + backstage allenamento"],
+    ["Gio","Chiedimi qualsiasi cosa"],
+    ["Ven","Cosa mangio, il venerdì sgarro"],
+    ["Sab","Vita vera, momento off"],
+    ["Dom","Vita vera, momento off"]
+  ];
+  var PALIN_YT=[
+    ["Lun","Post YT: sondaggio o domanda al pubblico"],
+    ["Gio","Post YT: anticipazione del video o tip lampo"]
+  ];
+  var PALIN_SHORT=[
+    ["Mar","Short / reel (1-1.5 min)"],
+    ["Gio","Short / reel"],
+    ["Sab","Short lifestyle, leggero"]
+  ];
+  var PALIN_LONG=[
+    ["Mar","Video lungo YouTube (8-20 min)"]
+  ];
+
+  function micStorie(n){
+    if(n===0)return "Inizia oggi: una storia, un take.";
+    if(n<=2)return "Hai rotto il ghiaccio. Vai avanti.";
+    if(n<=4)return "Stai prendendo il ritmo.";
+    if(n<=6)return "Sei in serie. Il blocco è alle spalle.";
+    return "Settimana piena. Grande costanza.";
+  }
+  function micYt(n){
+    if(n===0)return "Punta a 2 post: lunedì e giovedì.";
+    if(n===1)return "Primo post fatto. Ne manca uno.";
+    return "Settimana a posto. Ottimo ritmo.";
+  }
+  function micShort(n){
+    if(n===0)return "Punta a 2-3 short a settimana.";
+    if(n<=2)return "Bel ritmo, continua.";
+    return "Ottima settimana di short.";
+  }
+  function micLong(n){
+    if(n===0)return "Obiettivo: 1 video lungo a settimana.";
+    if(n===1)return "Video lungo fatto. Grande.";
+    return "Più di uno: che produttività.";
+  }
+
+  var MODES={
+    storie:{ideas:IDEAS_STORIE,palin:PALIN_STORIE,ideaLabel:"Storia di oggi",palinLabel:"Palinsesto della settimana",
+      primTxt:"Apri Instagram e registra",primIcon:IC.camera,primAction:"instagram://story-camera",
+      note:"1 take, niente rifacimenti",noteIcon:IC.mic,micro:micStorie,weekKey:"storie_week",dailyKey:"storie_daily"},
+    yt:{ideas:IDEAS_YT,palin:PALIN_YT,ideaLabel:"Spunto per il prossimo post",palinLabel:"Quando pubblicare",
+      primTxt:"Apri YouTube",primIcon:IC.play,primAction:"https://www.youtube.com",
+      note:"Scrivi come parli: breve, diretto, una sola idea",noteIcon:IC.pen,micro:micYt,weekKey:"yt_week",dailyKey:"yt_daily"},
+    short:{ideas:IDEAS_SHORT,palin:PALIN_SHORT,ideaLabel:"Argomento per uno Short",palinLabel:"Ritmo consigliato",
+      primTxt:"Copia l'argomento",primIcon:IC.copy,primAction:"COPY",
+      note:"Hook nei primi 2 secondi, una sola idea",noteIcon:IC.play,micro:micShort,weekKey:"short_week",dailyKey:"short_daily"},
+    long:{ideas:IDEAS_LONG,palin:PALIN_LONG,ideaLabel:"Argomento per un video lungo",palinLabel:"Ritmo consigliato",
+      primTxt:"Copia l'argomento",primIcon:IC.copy,primAction:"COPY",
+      note:"Un argomento, tanta sostanza, fonti solide",noteIcon:IC.pen,micro:micLong,weekKey:"long_week",dailyKey:"long_daily"}
+  };
+
+  function get(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}}
+  function set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+  function todayKey(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+  function weekKey(){var d=new Date();var t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));var dn=(t.getUTCDay()+6)%7;t.setUTCDate(t.getUTCDate()-dn+3);var f=new Date(Date.UTC(t.getUTCFullYear(),0,4));var w=1+Math.round(((t-f)/86400000-3+((f.getUTCDay()+6)%7))/7);return t.getUTCFullYear()+"-W"+w;}
+  function hashKey(s){var h=0;for(var i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}return h;}
+
+  var DAYS=["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
+  var MESI=["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+  var todayIdx=(new Date().getDay()+6)%7;
+  var nowD=new Date();
+  document.getElementById("date").textContent=nowD.getDate()+" "+MESI[nowD.getMonth()];
+
+  var backlog=get("storie_backlog",["Differenza tra fame vera e fame nervosa","Cosa tengo sempre nel frigo"]);
+  var mode, cfg, current, wkObj;
+
+  function loadDaily(){
+    var d=get(cfg.dailyKey,null);
+    if(!d||d.date!==todayKey()){d={date:todayKey(),idx:hashKey(todayKey()+cfg.ideaLabel)%cfg.ideas.length};set(cfg.dailyKey,d);}
+    current=cfg.ideas[d.idx];
+  }
+  function loadWeek(){
+    var w=get(cfg.weekKey,null);
+    if(!w||w.week!==weekKey()){w={week:weekKey(),days:[false,false,false,false,false,false,false]};set(cfg.weekKey,w);}
+    wkObj=w;
+  }
+  function renderIdea(){
+    document.getElementById("idea").textContent=current.t;
+    document.getElementById("rubrica").textContent=current.r;
+  }
+  function renderStreak(){
+    var n=wkObj.days.filter(Boolean).length;
+    document.getElementById("count").textContent=n;
+    document.getElementById("msg").textContent=cfg.micro(n);
+    var box=document.getElementById("pills");box.innerHTML="";
+    DAYS.forEach(function(d,i){
+      var b=document.createElement("button");
+      b.className="pill"+(wkObj.days[i]?" done":"")+(i===todayIdx?" today":"");
+      b.setAttribute("aria-pressed",wkObj.days[i]?"true":"false");
+      b.innerHTML="<span>"+d+"</span>"+(wkObj.days[i]?ICON_CHECK:ICON_DOT);
+      b.addEventListener("click",function(){wkObj.days[i]=!wkObj.days[i];set(cfg.weekKey,wkObj);renderStreak();});
+      box.appendChild(b);
+    });
+  }
+  function renderPalin(){
+    document.getElementById("palin-label").textContent=cfg.palinLabel;
+    var box=document.getElementById("palin");box.innerHTML="";
+    cfg.palin.forEach(function(p){
+      var r=document.createElement("div");r.className="row";
+      r.innerHTML='<span class="day">'+p[0]+'</span><span class="what">'+p[1]+'</span>';
+      box.appendChild(r);
+    });
+  }
+  function renderBacklog(){
+    var box=document.getElementById("bk-list");box.innerHTML="";
+    if(backlog.length===0){box.innerHTML='<p class="empty">Nessuna idea in cassetto. Aggiungine una quando ti viene.</p>';return;}
+    backlog.forEach(function(t,i){
+      var r=document.createElement("div");r.className="idea-row";
+      var s=document.createElement("span");s.textContent=t;
+      var del=document.createElement("button");del.className="icon-btn";del.setAttribute("aria-label","Elimina idea");del.innerHTML=ICON_TRASH;
+      del.addEventListener("click",function(){backlog.splice(i,1);set("storie_backlog",backlog);renderBacklog();});
+      r.appendChild(s);r.appendChild(del);box.appendChild(r);
+    });
+  }
+  function flash(btn,txt){var o=btn.textContent;btn.textContent=txt;setTimeout(function(){btn.textContent=o;},1200);}
+  function flashHtml(btn,html){var o=btn.innerHTML;btn.innerHTML=html;setTimeout(function(){btn.innerHTML=o;},1200);}
+
+  function applyMode(m){
+    mode=m;cfg=MODES[m];set("storie_mode",m);
+    var btns=document.querySelectorAll(".seg-btn");
+    for(var i=0;i<btns.length;i++){btns[i].classList.toggle("active",btns[i].getAttribute("data-mode")===m);}
+    document.getElementById("idea-label").textContent=cfg.ideaLabel;
+    document.getElementById("primary").innerHTML=cfg.primIcon+"<span>"+cfg.primTxt+"</span>";
+    document.getElementById("note").innerHTML=cfg.noteIcon+"<span>"+cfg.note+"</span>";
+    loadDaily();renderIdea();renderPalin();loadWeek();renderStreak();
+  }
+
+  var segBtns=document.querySelectorAll(".seg-btn");
+  for(var i=0;i<segBtns.length;i++){segBtns[i].addEventListener("click",function(){applyMode(this.getAttribute("data-mode"));});}
+  document.getElementById("primary").addEventListener("click",function(e){
+    if(cfg.primAction==="COPY"){
+      var b=e.currentTarget;var ok=function(){flashHtml(b,cfg.primIcon+"<span>Copiato!</span>");};
+      if(navigator.clipboard){navigator.clipboard.writeText(current.t).then(ok).catch(ok);}else{ok();}
+    }else{window.location.href=cfg.primAction;}
+  });
+  document.getElementById("done").addEventListener("click",function(e){wkObj.days[todayIdx]=true;set(cfg.weekKey,wkObj);renderStreak();flash(e.currentTarget,"Bravo!");});
+  document.getElementById("shuffle").addEventListener("click",function(){var d={date:todayKey(),idx:Math.floor(Math.random()*cfg.ideas.length)};set(cfg.dailyKey,d);current=cfg.ideas[d.idx];renderIdea();});
+  document.getElementById("copy").addEventListener("click",function(e){var b=e.currentTarget;if(navigator.clipboard){navigator.clipboard.writeText(current.t).then(function(){flash(b,"Copiato!");});}else{flash(b,"Copiato!");}});
+  document.getElementById("bk-add").addEventListener("click",addIdea);
+  document.getElementById("bk-input").addEventListener("keydown",function(e){if(e.key==="Enter")addIdea();});
+  function addIdea(){var inp=document.getElementById("bk-input");var v=(inp.value||"").trim();if(!v)return;backlog.push(v);set("storie_backlog",backlog);inp.value="";renderBacklog();}
+
+  applyMode(get("storie_mode","storie"));
+  renderBacklog();
+
+  if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
+})();
+</script>
+</body>
+</html>
