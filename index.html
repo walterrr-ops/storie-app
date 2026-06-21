@@ -163,7 +163,12 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     {r:"Dietro il camice",t:"Un errore che facevi anche tu con l'alimentazione. Ammetterlo ti rende umano."},
     {r:"Backstage allenamento",t:"Filma il tuo allenamento di oggi, anche se eri stanco e svogliato."},
     {r:"Backstage allenamento",t:"Mostra un esercizio che fai tu e spiega l'errore più comune in 30 secondi."},
-    {r:"Vita vera",t:"Un momento off: un giro in sim racing con Osvaldo o una serata tra amici. Mostra la persona."}
+    {r:"Vita vera",t:"Un momento off: un giro in sim racing con Osvaldo o una serata tra amici. Mostra la persona."},
+    {r:"Vita vera",t:"Com'è davvero la tua domenica: colazione con calma, famiglia, zero allenamento. Va bene così."},
+    {r:"Vita vera",t:"Cosa fai per staccare la testa nel weekend? Falla vedere, senza filtri."},
+    {r:"Vita vera",t:"Il pranzo della domenica in famiglia: il cibo conviviale, quello vero. Niente bilancia."},
+    {r:"Vita vera",t:"La tua passione oltre la nutrizione: raccontala con leggerezza, in un take."},
+    {r:"Vita vera",t:"Una cosa normale della tua giornata che ti fa stare bene. Mostrala e basta."}
   ];
   var IDEAS_YT=[
     {r:"Sondaggio",t:"Sondaggio: quando mangi intorno all'allenamento? Prima, dopo, sia prima che dopo. Poi commenti."},
@@ -374,7 +379,7 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     }else{window.location.href=cfg.primAction;}
   });
   document.getElementById("done").addEventListener("click",function(e){wkObj.days[todayIdx]=true;set(cfg.weekKey,wkObj);renderStreak();flash(e.currentTarget,"Bravo!");});
-  document.getElementById("shuffle").addEventListener("click",function(){var pool=poolForToday();current=pool[Math.floor(Math.random()*pool.length)];set(cfg.dailyKey,{date:todayKey(),r:current.r,t:current.t});renderIdea();});
+  document.getElementById("shuffle").addEventListener("click",function(){var pool=poolForToday();var pick=pool[0];if(pool.length>1){var prev=current?current.t:null;var guard=0;do{pick=pool[Math.floor(Math.random()*pool.length)];}while(pick.t===prev&&++guard<20);}current=pick;set(cfg.dailyKey,{date:todayKey(),r:current.r,t:current.t});renderIdea();});
   document.getElementById("copy").addEventListener("click",function(e){var b=e.currentTarget;if(navigator.clipboard){navigator.clipboard.writeText(current.t).then(function(){flash(b,"Copiato!");});}else{flash(b,"Copiato!");}});
   document.getElementById("bk-add").addEventListener("click",addIdea);
   document.getElementById("bk-input").addEventListener("keydown",function(e){if(e.key==="Enter")addIdea();});
