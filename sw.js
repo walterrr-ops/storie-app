@@ -1,4 +1,4 @@
-const CACHE = "storie-v5";
+const CACHE = "storie-v6";
 const ASSETS = [
   "./",
   "index.html",

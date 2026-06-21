@@ -218,17 +218,17 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     {r:"Donne 40+",t:"Dimagrire dopo i 40-50 anni: cosa cambia e come adattarsi."}
   ];
   var PALIN_STORIE=[
-    ["Lun","Pensiero del giorno + cosa mangio"],
-    ["Mar","Vero o falso?"],
-    ["Mer","Pensiero + backstage allenamento"],
-    ["Gio","Chiedimi qualsiasi cosa"],
-    ["Ven","Cosa mangio, il venerdì sgarro"],
-    ["Sab","Vita vera, momento off"],
-    ["Dom","Vita vera, momento off"]
+    ["Lun","Pensiero del giorno + cosa mangio",["Pensiero del giorno","Cosa mangio davvero"]],
+    ["Mar","Vero o falso?",["Vero o falso?"]],
+    ["Mer","Pensiero + backstage allenamento",["Pensiero del giorno","Backstage allenamento"]],
+    ["Gio","Chiedimi qualsiasi cosa",["Chiedimi qualsiasi cosa"]],
+    ["Ven","Cosa mangio, il venerdì sgarro",["Cosa mangio davvero"]],
+    ["Sab","Dietro il camice, lato umano",["Dietro il camice","Vita vera"]],
+    ["Dom","Vita vera, momento off",["Vita vera"]]
   ];
   var PALIN_YT=[
-    ["Lun","Post YT: sondaggio o domanda al pubblico"],
-    ["Gio","Post YT: anticipazione del video o tip lampo"]
+    ["Lun","Post YT: sondaggio o domanda al pubblico",["Sondaggio","Domanda al pubblico"]],
+    ["Gio","Post YT: anticipazione del video o tip lampo",["Anticipazione video","Tip lampo"]]
   ];
   var PALIN_SHORT=[
     ["Mar","Short / reel (1-1.5 min)"],
@@ -292,10 +292,22 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
   var backlog=get("storie_backlog",["Differenza tra fame vera e fame nervosa","Cosa tengo sempre nel frigo"]);
   var mode, cfg, current, wkObj;
 
+  function poolForToday(){
+    var rubs=null;
+    for(var i=0;i<cfg.palin.length;i++){ if(cfg.palin[i][0]===DAYS[todayIdx]){ rubs=cfg.palin[i][2]||null; break; } }
+    if(rubs&&rubs.length){
+      var f=cfg.ideas.filter(function(x){return rubs.indexOf(x.r)>=0;});
+      if(f.length) return f;
+    }
+    return cfg.ideas;
+  }
   function loadDaily(){
+    var pool=poolForToday();
     var d=get(cfg.dailyKey,null);
-    if(!d||d.date!==todayKey()){d={date:todayKey(),idx:hashKey(todayKey()+cfg.ideaLabel)%cfg.ideas.length};set(cfg.dailyKey,d);}
-    current=cfg.ideas[d.idx];
+    if(d&&d.date===todayKey()&&d.t){current={r:d.r,t:d.t};return;}
+    var idx=hashKey(todayKey()+cfg.ideaLabel)%pool.length;
+    current=pool[idx];
+    set(cfg.dailyKey,{date:todayKey(),r:current.r,t:current.t});
   }
   function loadWeek(){
     var w=get(cfg.weekKey,null);
@@ -362,7 +374,7 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     }else{window.location.href=cfg.primAction;}
   });
   document.getElementById("done").addEventListener("click",function(e){wkObj.days[todayIdx]=true;set(cfg.weekKey,wkObj);renderStreak();flash(e.currentTarget,"Bravo!");});
-  document.getElementById("shuffle").addEventListener("click",function(){var d={date:todayKey(),idx:Math.floor(Math.random()*cfg.ideas.length)};set(cfg.dailyKey,d);current=cfg.ideas[d.idx];renderIdea();});
+  document.getElementById("shuffle").addEventListener("click",function(){var pool=poolForToday();current=pool[Math.floor(Math.random()*pool.length)];set(cfg.dailyKey,{date:todayKey(),r:current.r,t:current.t});renderIdea();});
   document.getElementById("copy").addEventListener("click",function(e){var b=e.currentTarget;if(navigator.clipboard){navigator.clipboard.writeText(current.t).then(function(){flash(b,"Copiato!");});}else{flash(b,"Copiato!");}});
   document.getElementById("bk-add").addEventListener("click",addIdea);
   document.getElementById("bk-input").addEventListener("keydown",function(e){if(e.key==="Enter")addIdea();});
