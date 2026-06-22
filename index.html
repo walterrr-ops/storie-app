@@ -51,6 +51,8 @@ h1{font-size:22px; font-weight:600; margin:0; letter-spacing:-0.01em}
 .note svg{width:15px; height:15px; flex:none}
 .fhint{margin:14px 0 0; font-size:13px; line-height:1.5; background:var(--accent-bg); color:var(--accent-text); border-radius:10px; padding:10px 12px}
 .fhint b{font-weight:600}
+.btn-ai{width:100%; margin-top:8px; border-color:var(--accent); color:var(--accent-text)}
+.btn-ai svg{width:18px; height:18px; flex:none}
 .section{margin-top:22px}
 .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px}
 .section-head .label{margin:0}
@@ -101,6 +103,7 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
       <button class="btn" id="shuffle">Altra idea</button>
       <button class="btn" id="copy">Copia</button>
     </div>
+    <button class="btn btn-ai" id="ai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z"/></svg><span>Prompt per Claude / Gemini</span></button>
     <p class="note" id="note"></p>
     <div class="fhint" id="format-hint"></div>
   </div>
@@ -349,6 +352,27 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     if(lean==="scritta")return {tipo:"scritta o interattiva",motivo:"Argomento da sondaggio o quiz: qui l'interattivo funziona di più."};
     return {tipo:"parlata",motivo:"A quest'ora si può ascoltare: usa la tua voce, è più autentica e crea legame."};
   }
+  function buildAIPrompt(){
+    var pre="Sei l'assistente copywriter di Walter Antonucci, biologo nutrizionista e personal trainer (oltre 230k follower). Tono: caldo e diretto, da amico esperto, scientifico ma semplice. Regole ferree: non demonizzare nessun cibo (educa a completare e alternare, mai a 'evitare'); niente marchi commerciali (usa categorie generiche); guarda al quadro d'insieme, non al singolo alimento; prendi posizione contro i guru e il diet talk, mai contro il cibo o contro chi lo mangia.\n\n";
+    var idea=current.t; var task;
+    if(mode==="storie"){
+      var tipo=suggerimentoFormato(current.r).tipo;
+      if(tipo.indexOf("scritta")===0){
+        task="Scrivimi una Instagram Story SCRITTA (testo a schermo, pensata per essere guardata senza audio) su questo spunto: «"+idea+"». Dammi 3 frame: 1) frame-gancio con una frase forte; 2) frame centrale con il messaggio chiave in poche parole; 3) frame finale con una CTA. Testo breve, leggibile in pochi secondi.";
+      } else if(tipo.indexOf("parlata + sottotitoli")===0){
+        task="Scrivimi una Instagram Story PARLATA (un solo take, 30-45 secondi) su questo spunto: «"+idea+"». Dammi: la frase-gancio dei primi 2 secondi, cosa dire in 3 blocchi brevi, una CTA finale; in più i SOTTOTITOLI frase per frase, perché molti la guarderanno in muto.";
+      } else {
+        task="Scrivimi una Instagram Story PARLATA (un solo take, 30-45 secondi) su questo spunto: «"+idea+"». Dammi: la frase-gancio dei primi 2 secondi, cosa dire in 3 blocchi brevi, una CTA finale leggera. Linguaggio parlato e naturale, come se parlassi a una persona sola.";
+      }
+    } else if(mode==="yt"){
+      task="Scrivimi un post scritto per la community di YouTube su questo spunto: «"+idea+"». Massimo 4-5 righe, tono diretto, chiudi con una domanda che inviti al commento. Se è un sondaggio, proponi 3-4 opzioni di voto.";
+    } else if(mode==="short"){
+      task="Scrivimi lo script di un Reel/Short di 60-90 secondi su questo argomento: «"+idea+"». Struttura: hook fortissimo nei primi 2 secondi, corpo educativo chiaro, chiusura che richiama l'hook con una CTA. Dammi anche 2 alternative di hook.";
+    } else {
+      task="Fammi la scaletta e i punti chiave di un video YouTube di 8-15 minuti su questo argomento: «"+idea+"». Dammi: un titolo onesto ma accattivante, l'hook iniziale, 4-6 sezioni con i concetti da spiegare, una chiusura con CTA, e segnala dove servono fonti scientifiche.";
+    }
+    return pre+task+"\n\nMantieni sempre il tono e le regole indicate sopra.";
+  }
   function renderFormatHint(){
     var el=document.getElementById("format-hint");if(!el)return;
     if(mode!=="storie"){el.style.display="none";return;}
@@ -419,6 +443,7 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
   document.getElementById("done").addEventListener("click",function(e){wkObj.days[todayIdx]=true;set(cfg.weekKey,wkObj);renderStreak();flash(e.currentTarget,"Bravo!");});
   document.getElementById("shuffle").addEventListener("click",function(){var pool=poolForToday();var pick=pool[0];if(pool.length>1){var prev=current?current.t:null;var guard=0;do{pick=pool[Math.floor(Math.random()*pool.length)];}while(pick.t===prev&&++guard<20);}current=pick;set(cfg.dailyKey,{date:todayKey(),r:current.r,t:current.t});renderIdea();});
   document.getElementById("copy").addEventListener("click",function(e){var b=e.currentTarget;if(navigator.clipboard){navigator.clipboard.writeText(current.t).then(function(){flash(b,"Copiato!");});}else{flash(b,"Copiato!");}});
+  document.getElementById("ai").addEventListener("click",function(e){var b=e.currentTarget;var txt=buildAIPrompt();function ok(){flashHtml(b,"<span>Prompt copiato! Incollalo su Claude o Gemini</span>");}if(navigator.clipboard){navigator.clipboard.writeText(txt).then(ok).catch(ok);}else{ok();}});
   document.getElementById("bk-add").addEventListener("click",addIdea);
   document.getElementById("bk-input").addEventListener("keydown",function(e){if(e.key==="Enter")addIdea();});
   function addIdea(){var inp=document.getElementById("bk-input");var v=(inp.value||"").trim();if(!v)return;backlog.push(v);set("storie_backlog",backlog);inp.value="";renderBacklog();}
@@ -426,7 +451,7 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
   applyMode(get("storie_mode","storie"));
   renderBacklog();
 
-  var META={versione:"v9",aggiornato:"21 giugno 2026",crediti:23438,fonti:"commenti IG+YT, Reddit, Google Trends"};
+  var META={versione:"v10",aggiornato:"21 giugno 2026",crediti:23438,fonti:"commenti IG+YT, Reddit, Google Trends"};
   var ft=document.getElementById("footer");
   if(ft){ft.innerHTML="Versione "+META.versione+" · idee aggiornate il "+META.aggiornato+"<br>"+META.crediti.toLocaleString("it-IT")+" crediti ScrapeCreators rimasti<br>Fonti: "+META.fonti+"<br>I dati restano sul tuo telefono. Funziona anche offline.";}
 
