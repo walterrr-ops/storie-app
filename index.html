@@ -49,6 +49,8 @@ h1{font-size:22px; font-weight:600; margin:0; letter-spacing:-0.01em}
 .btn-row .btn{flex:1}
 .note{font-size:12px; color:var(--hint); margin:12px 0 0; display:flex; align-items:center; gap:6px}
 .note svg{width:15px; height:15px; flex:none}
+.fhint{margin:14px 0 0; font-size:13px; line-height:1.5; background:var(--accent-bg); color:var(--accent-text); border-radius:10px; padding:10px 12px}
+.fhint b{font-weight:600}
 .section{margin-top:22px}
 .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px}
 .section-head .label{margin:0}
@@ -100,6 +102,7 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
       <button class="btn" id="copy">Copia</button>
     </div>
     <p class="note" id="note"></p>
+    <div class="fhint" id="format-hint"></div>
   </div>
 
   <div class="section">
@@ -335,9 +338,28 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
     if(!w||w.week!==weekKey()){w={week:weekKey(),days:[false,false,false,false,false,false,false]};set(cfg.weekKey,w);}
     wkObj=w;
   }
+  var LEAN={"Pensiero del giorno":"parlata","Dietro il camice":"parlata","Vita vera":"parlata","Chiedimi qualsiasi cosa":"parlata","Vero o falso?":"scritta","Cosa mangio davvero":"neutra","Backstage allenamento":"neutra"};
+  function inWorkWindow(){var d=new Date();var wd=(d.getDay()+6)%7;if(wd>4)return false;var t=d.getHours()*60+d.getMinutes();return (t>=540&&t<720)||(t>=840&&t<1020);}
+  function suggerimentoFormato(rub){
+    var lean=LEAN[rub]||"neutra";
+    if(inWorkWindow()){
+      if(lean==="parlata")return {tipo:"parlata + sottotitoli",motivo:"Vive della tua voce, ma a quest'ora molti sono al lavoro: parlala e aggiungi i sottotitoli, così rende anche in muto."};
+      return {tipo:"scritta (testo a schermo)",motivo:"Orario d'ufficio: molti guardano senza audio. Meglio testo, sondaggio o video con scritte."};
+    }
+    if(lean==="scritta")return {tipo:"scritta o interattiva",motivo:"Argomento da sondaggio o quiz: qui l'interattivo funziona di più."};
+    return {tipo:"parlata",motivo:"A quest'ora si può ascoltare: usa la tua voce, è più autentica e crea legame."};
+  }
+  function renderFormatHint(){
+    var el=document.getElementById("format-hint");if(!el)return;
+    if(mode!=="storie"){el.style.display="none";return;}
+    el.style.display="";
+    var s=suggerimentoFormato(current.r);
+    el.innerHTML='<b>Meglio '+s.tipo+'</b><br>'+s.motivo;
+  }
   function renderIdea(){
     document.getElementById("idea").textContent=current.t;
     document.getElementById("rubrica").textContent=current.r;
+    renderFormatHint();
   }
   function renderStreak(){
     var n=wkObj.days.filter(Boolean).length;
@@ -404,7 +426,7 @@ footer{max-width:560px; margin:24px auto 0; padding:0 16px; font-size:12px; colo
   applyMode(get("storie_mode","storie"));
   renderBacklog();
 
-  var META={versione:"v8",aggiornato:"21 giugno 2026",crediti:23438,fonti:"commenti IG+YT, Reddit, Google Trends"};
+  var META={versione:"v9",aggiornato:"21 giugno 2026",crediti:23438,fonti:"commenti IG+YT, Reddit, Google Trends"};
   var ft=document.getElementById("footer");
   if(ft){ft.innerHTML="Versione "+META.versione+" · idee aggiornate il "+META.aggiornato+"<br>"+META.crediti.toLocaleString("it-IT")+" crediti ScrapeCreators rimasti<br>Fonti: "+META.fonti+"<br>I dati restano sul tuo telefono. Funziona anche offline.";}
 
